@@ -1,18 +1,18 @@
 [
   {
     "name": "veg soup",
-    "order": 200
+    "orders": 200
   },
   {
     "name": "veg curry",
-    "order": 600
+    "orders": 600
   },
   {
     "name": "veg pasta",
-    "order": 300
+    "orders": 300
   },
   {
     "name": "veg surprice",
-    "order": 900
+    "orders": 900
   }
 ]
