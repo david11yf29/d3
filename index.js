@@ -1,28 +1,55 @@
-const svg = d3.select('svg');
+// under canvas class append svg element
+const svg = d3.select('.canvas')
+  .append('svg')
+    .attr('width', 600)
+    .attr('height', 600);
+
+// create margins and dimensions
+const margin = {top: 20, right: 20, bottom: 100, left: 100}
+const graphWidth = 600 - margin.right - margin.left;
+const graphHeight = 600 - margin.top - margin.bottom;
+
+// under svg element append graph(g) element for margin
+const graph = svg.append('g')
+  .attr('width', graphWidth)
+  .attr('height', graphHeight)
+  .attr('transform', `translate(${margin.left}, ${margin.top})`)
 
 d3.json('./menu.json').then(data => {
 
+  // find min/max value in data
+  const min = d3.min(data, d => d.orders);
+  const max = d3.max(data, d => d.orders);
+  const extent = d3.extent(data, d => d.orders); // return array with min, max
+
   // create scaler in y axis(shrink number at some ratio)
   const y = d3.scaleLinear()
-    .domain([0, 1000]) // max/min
+    .domain([0, max]) // max/min
     .range([0 ,500]) // shrink to what max/min
+
+  // create scaler in x axis(bandscales)
+  const x = d3.scaleBand()
+    .domain(data.map(item => item.name)) // ['veg soup', ...]
+    .range([0, 500])
+    .paddingInner(0.2) // add x padding inner
+    .paddingOuter(0.2); // add x padding outer
   
-  // join data to rect (only one rect element)
-  const rect = svg.selectAll('rect')
+  // join data to rect(if there is any under graph(g) element)
+  const rects = graph.selectAll('rect')
     .data(data)
 
-  // set rect attr (only one)
-  rect.attr('width', 50)
-    .attr('height', d => y(d.orders)) // input into scaler
+  // set rect attr
+  rects.attr('width', x.bandwidth) // apply x scaler(bandwidth) here is 500/4(items) = 125
+    .attr('height', d => y(d.orders)) // input into y scaler
     .attr('fill', 'orange')
-    .attr('x', (d, i) => i * 70)
+    .attr('x', (d) => x(d.name)) // input inyto x scaler
 
-  // append the enter selection to rect (rest data)
-  rect.enter()
+  // append the rect element under graph(g) for the rest data and set rect attr
+  rects.enter()
     .append('rect')
-      .attr('width', 50)
-      .attr('height', d => y(d.orders)) // input into scaler
+      .attr('width', x.bandwidth)
+      .attr('height', d => y(d.orders)) // input into y scaler
       .attr('fill', 'orange')
-      .attr('x', (d, i) => i * 70)
+      .attr('x', (d) => x(d.name)) // input inyto x scaler 500/4(items) = 125
 
 })

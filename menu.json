@@ -14,5 +14,9 @@
   {
     "name": "veg surprice",
     "orders": 900
+  },
+  {
+    "name": "veg burger",
+    "orders": 1500
   }
 ]
