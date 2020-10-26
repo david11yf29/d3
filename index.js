@@ -32,7 +32,7 @@ d3.json('./menu.json').then(data => {
   // create scaler in y axis(shrink number at some ratio)
   const y = d3.scaleLinear()
     .domain([0, max]) // max/min
-    .range([0, graphHeight]) // shrink to what max/min
+    .range([graphHeight, 0]) // shrink to what max/min
 
   // create scaler in x axis(bandscales)
   const x = d3.scaleBand()
