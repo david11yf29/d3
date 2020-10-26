@@ -62,10 +62,16 @@ d3.json('./menu.json').then(data => {
       .attr('y', d => y(d.orders)) // set the start point for y
 
   // create and call the axes
-  const xAxis = d3.axisBottom(x); // input x scaler
-  const yAxis = d3.axisLeft(y); // input y scaler
+  const xAxis = d3.axisBottom(x) // input x scaler
+  const yAxis = d3.axisLeft(y) // input y scaler
+    .ticks(3)
+    .tickFormat(d => d + ' orders');
 
   xAxisGroup.call(xAxis); // put xAxis into xAxisGroup
   yAxisGroup.call(yAxis); // put yAxis into yAxisGroup
 
+  xAxisGroup.selectAll('text')
+    .attr('transform', 'rotate(-40)')
+    .attr('text-anchor', 'end')
+    .attr('fill', 'orange')
 })
