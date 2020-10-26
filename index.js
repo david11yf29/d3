@@ -22,7 +22,11 @@ const xAxisGroup = graph.append('g')
 // create y axis
 const yAxisGroup = graph.append('g');
 
-d3.json('./menu.json').then(data => {
+db.collection('dishes').get().then(res => {
+  const data = [];
+  res.docs.forEach(doc => {
+    data.push(doc.data());
+  })
 
   // find min/max value in data
   const min = d3.min(data, d => d.orders);

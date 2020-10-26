@@ -11,6 +11,26 @@
     
   </div>
 
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+
+  <script>
+    let firebaseConfig = {
+      apiKey: "AIzaSyCaY1aDUxxJX_KPjZYwxKbAC7AVKJeCLFQ",
+      authDomain: "d3-database-d28ef.firebaseapp.com",
+      databaseURL: "https://d3-database-d28ef.firebaseio.com",
+      projectId: "d3-database-d28ef",
+      storageBucket: "d3-database-d28ef.appspot.com",
+      messagingSenderId: "262751849024",
+      appId: "1:262751849024:web:c5804716d4ca03498d2da5",
+      measurementId: "G-ZEPC6KM6DR"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="index.js"></script>
 
