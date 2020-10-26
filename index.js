@@ -47,17 +47,19 @@ d3.json('./menu.json').then(data => {
 
   // set rect attr
   rects.attr('width', x.bandwidth) // apply x scaler(bandwidth) here is 500/4(items) = 125
-    .attr('height', d => y(d.orders)) // input into y scaler
+    .attr('height', d => graphHeight - y(d.orders)) // input into y scaler
     .attr('fill', 'orange')
-    .attr('x', (d) => x(d.name)) // input inyto x scaler
+    .attr('x', (d) => x(d.name)) // input into x scaler
+    .attr('y', d => y(d.orders)) // set the start point for y
 
   // append the rect element under graph(g) for the rest data and set rect attr
   rects.enter()
     .append('rect')
       .attr('width', x.bandwidth)
-      .attr('height', d => y(d.orders)) // input into y scaler
+      .attr('height', d => graphHeight - y(d.orders)) // input into y scaler
       .attr('fill', 'orange')
       .attr('x', (d) => x(d.name)) // input inyto x scaler 500/4(items) = 125
+      .attr('y', d => y(d.orders)) // set the start point for y
 
   // create and call the axes
   const xAxis = d3.axisBottom(x); // input x scaler
