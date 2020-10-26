@@ -10,10 +10,17 @@ const graphWidth = 600 - margin.right - margin.left;
 const graphHeight = 600 - margin.top - margin.bottom;
 
 // under svg element append graph(g) element for margin
-const graph = svg.append('g')
+const graph = svg.append('g') // graph(g) core content
   .attr('width', graphWidth)
   .attr('height', graphHeight)
   .attr('transform', `translate(${margin.left}, ${margin.top})`)
+
+// create x axis
+const xAxisGroup = graph.append('g')
+  .attr('transform', `translate(0, ${graphHeight})`)
+
+// create y axis
+const yAxisGroup = graph.append('g');
 
 d3.json('./menu.json').then(data => {
 
@@ -25,7 +32,7 @@ d3.json('./menu.json').then(data => {
   // create scaler in y axis(shrink number at some ratio)
   const y = d3.scaleLinear()
     .domain([0, max]) // max/min
-    .range([0 ,500]) // shrink to what max/min
+    .range([0, graphHeight]) // shrink to what max/min
 
   // create scaler in x axis(bandscales)
   const x = d3.scaleBand()
@@ -51,5 +58,12 @@ d3.json('./menu.json').then(data => {
       .attr('height', d => y(d.orders)) // input into y scaler
       .attr('fill', 'orange')
       .attr('x', (d) => x(d.name)) // input inyto x scaler 500/4(items) = 125
+
+  // create and call the axes
+  const xAxis = d3.axisBottom(x); // input x scaler
+  const yAxis = d3.axisLeft(y); // input y scaler
+
+  xAxisGroup.call(xAxis); // put xAxis into xAxisGroup
+  yAxisGroup.call(yAxis); // put yAxis into yAxisGroup
 
 })
