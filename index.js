@@ -60,7 +60,7 @@ const update = (data) => {
   const rects = graph.selectAll('rect')
     .data(data);
 
-  // remove exit selection
+  // remove rect that don't need
   rects.exit().remove();
 
   // update current shapes in dom
@@ -94,4 +94,10 @@ db.collection('dishes').get().then(res => {
   });
 
   update(data);
+
+  // d3.interval(() => {
+  //   data.pop()
+  //   update(data);
+  // }, 3000)
+
 });
