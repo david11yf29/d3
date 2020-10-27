@@ -61,11 +61,12 @@ const update = (data) => {
 
   // update current shapes in dom
   rects.attr('width', x.bandwidth) 
-    .attr('height', d => graphHeight - y(d.orders)) 
     .attr('fill', 'orange')
     .attr('x', (d) => x(d.name))
-    .attr('y', d => y(d.orders)) 
- 
+    // .transition().duration(1000)
+    //   .attr('y', d => y(d.orders)) 
+    //   .attr('height', d => graphHeight - y(d.orders)) 
+
   // append the enter selection to the DOM
   rects.enter()
   .append('rect')
@@ -74,7 +75,8 @@ const update = (data) => {
     .attr('fill', 'orange')
     .attr('x', (d) => x(d.name))
     .attr('y', graphHeight) //start
-    .transition().duration(5000) // add transistion
+    .merge(rects) // all rect apply code display in next lines
+    .transition().duration(2000) // add transistion
       .attr('y', d => y(d.orders)) // end(decide direction -> go up)
       .attr('height', d => graphHeight - y(d.orders)) // end
 
@@ -113,6 +115,12 @@ db.collection('dishes').onSnapshot(res => {
 
   update(data);
 })
+
+// TWEENS
+
+const widthTween = (d) => {
+  
+}
 
 
 
