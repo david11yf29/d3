@@ -15,10 +15,6 @@ const graph = svg.append('g') // graph(g) core content
   .attr('height', graphHeight)
   .attr('transform', `translate(${margin.left}, ${margin.top})`)
 
-graph.append('rect');
-graph.append('rect');
-graph.append('rect');
-
 // create x axis
 const xAxisGroup = graph.append('g')
   .attr('transform', `translate(0, ${graphHeight})`)
@@ -74,11 +70,14 @@ const update = (data) => {
   rects.enter()
   .append('rect')
     .attr('width', x.bandwidth)
-    .attr('height', d => graphHeight - y(d.orders)) 
+    .attr('height', 0) // start
     .attr('fill', 'orange')
     .attr('x', (d) => x(d.name))
-    .attr('y', d => y(d.orders))
-   
+    .attr('y', graphHeight) //start
+    .transition().duration(5000) // add transistion
+      .attr('y', d => y(d.orders)) // end(decide direction -> go up)
+      .attr('height', d => graphHeight - y(d.orders)) // end
+
   // call axes  
   xAxisGroup.call(xAxis); // put xAxis into xAxisGroup
   yAxisGroup.call(yAxis); // put yAxis into yAxisGroup
