@@ -36,7 +36,10 @@ const update = (data) => {
     .data(pie(data));
 
   // handle the exit selection
-  paths.exit().remove()
+  paths.exit()
+    .transition().duration(2000)
+    .attrTween('d', arcTweenExit)
+  .remove()
 
   // handle the current DOM path updates
   paths.attr('d', arcPath);
@@ -48,6 +51,8 @@ const update = (data) => {
       .attr('stroke', '#fff')
       .attr('stroke-width', 3)
       .attr('fill', d => color(d.data.name)) // name is inside pie(data)'s data property
+      .transition().duration(2000)
+        .attrTween("d", arcTweenEnter);
 
 
 
@@ -82,3 +87,21 @@ db.collection('expenses').onSnapshot(res => {
   update(data);
 
 })
+
+const arcTweenEnter = (d) => {
+  let i = d3.interpolate(d.endAngle, d.startAngle);
+
+  return function(t) {
+    d.startAngle = i(t);
+    return arcPath(d);
+  }
+}
+
+const arcTweenExit = (d) => {
+  let i = d3.interpolate(d.startAngle, d.endAngle);
+
+  return function(t) {
+    d.startAngle = i(t);
+    return arcPath(d);
+  }
+}
