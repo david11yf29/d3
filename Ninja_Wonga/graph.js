@@ -71,6 +71,9 @@ const update = (data) => {
       .transition().duration(2000)
         .attrTween("d", arcTweenEnter);
 
+  // add events
+  graph.selectAll('path')
+    .on('mouseover', handleMouseOver);
 
 
 };
@@ -138,4 +141,9 @@ function arcTweenUpdate(d) {
     return arcPath(i(t))
   }
 
+}
+
+// event handlers
+const handleMouseOver = (d, i, n) => {
+  console.log(n[i]);
 }
