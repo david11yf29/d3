@@ -7,4 +7,57 @@ const svg = d3.select('.canvas')
   .attr('height', dims.height + 150);
 
 const graph = svg.append('g')
-  .attr('transform', `translate(${cent.x}, ${cent.y})`)
+  .attr('transform', `translate(${cent.x}, ${cent.y})`);
+
+// create pie angles for pie chart => 3.14159
+const pie = d3.pie()
+  .sort(null)
+  .value(d => d.cost)
+
+// create arc path
+const arcPath = d3.arc()
+  .outerRadius(dims.radius)
+  .innerRadius(dims.radius / 2);
+
+// update function
+const update = (data) => {
+  // [{}, {}, {}]
+  // join pie data to path element
+  const paths = graph.selectAll('path')
+    .data(pie(data)) // include all pie information rather than just data
+
+  paths.enter()
+    .append('path') 
+      .attr('class', 'arc') // class="arc"
+      .attr('d', arcPath) // d="M9.130423 ..."
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 3)
+
+}
+
+// reach firestore and pull out data and put into data array
+let data = [];
+
+db.collection('expenses').onSnapshot(res => {
+  res.docChanges().forEach(change => {
+    const doc = { ...change.doc.data(), id: change.doc.id };
+
+    // updated to data array
+    switch (change.type) {
+      case 'added':
+        data.push(doc);
+        break;
+      case 'modified':
+        const index = data.findIndex(item => item.id == doc.id);
+        data[index] = doc;
+        break;
+      case 'removed':
+        data = data.filter(item => item.id !== doc.id);
+      break;
+    }
+
+    // ready for data and update to pie chart
+    update(data);
+  })
+})
+
