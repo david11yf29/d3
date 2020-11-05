@@ -14,7 +14,7 @@ const pie = d3.pie()
   .sort(null)
   .value(d => d.cost)
 
-// create arc path
+// create arc path draw
 const arcPath = d3.arc()
   .outerRadius(dims.radius)
   .innerRadius(dims.radius / 2);
@@ -32,8 +32,13 @@ const update = (data) => {
   // join pie data to path element
   const paths = graph.selectAll('path')
     .data(pie(data)) // include all pie information rather than just data
+  console.log(pie(data));
 
-    console.log(pie(data));
+  // handle the exit data
+  paths.exit().remove();
+
+  // handle the current DOM path updates
+  paths.attr('d', arcPath);
 
   paths.enter()
     .append('path') 
