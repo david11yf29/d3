@@ -19,12 +19,21 @@ const arcPath = d3.arc()
   .outerRadius(dims.radius)
   .innerRadius(dims.radius / 2);
 
+// set color
+const color = d3.scaleOrdinal(d3['schemeSet3']);
+
 // update function
 const update = (data) => {
+
+  // update color scale domain
+  color.domain(data.map(d => d.name)); // domain function need a data array
+
   // [{}, {}, {}]
   // join pie data to path element
   const paths = graph.selectAll('path')
     .data(pie(data)) // include all pie information rather than just data
+
+    console.log(pie(data));
 
   paths.enter()
     .append('path') 
@@ -32,6 +41,7 @@ const update = (data) => {
       .attr('d', arcPath) // d="M9.130423 ..."
       .attr('stroke', '#fff')
       .attr('stroke-width', 3)
+      .attr('fill', d => color(d.data.name)) // add color to different name
 
 }
 
