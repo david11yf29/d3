@@ -47,6 +47,8 @@ const update = (data) => {
       .attr('stroke', '#fff')
       .attr('stroke-width', 3)
       .attr('fill', d => color(d.data.name)) // add color to different name
+      .transition().duration(750)
+        .attrTween('d', arcTweenEnter)
 
 }
 
@@ -74,5 +76,14 @@ db.collection('expenses').onSnapshot(res => {
     // ready for data and update to pie chart
     update(data);
   })
-})
+});
+
+const arcTweenEnter = (d) => {
+  var i = d3.interpolate(d.endAngle, d.startAngle);
+
+  return function(t) {
+    d.startAngle = i(t);
+    return arcPath(d); 
+  }
+}
 
