@@ -41,7 +41,9 @@ const update = (data) => {
     .remove();
 
   // handle the current DOM path updates
-  paths.attr('d', arcPath);
+  paths.attr('d', arcPath)
+    .transition().duration(750)
+    .attrTween('d', arcTweenUpdate)
 
   paths.enter()
     .append('path') 
@@ -50,8 +52,9 @@ const update = (data) => {
       .attr('stroke', '#fff')
       .attr('stroke-width', 3)
       .attr('fill', d => color(d.data.name)) // add color to different name
+      .each(function(d){ this._current = d })
       .transition().duration(750)
-        .attrTween('d', arcTweenEnter)
+        // .attrTween('d', arcTweenEnter)
 
 }
 
@@ -82,7 +85,7 @@ db.collection('expenses').onSnapshot(res => {
 });
 
 const arcTweenEnter = (d) => {
-  var i = d3.interpolate(d.endAngle, d.startAngle);
+  var i = d3.interpolate(d.startAngle, d.endAngle);
 
   return function(t) {
     d.startAngle = i(t);
@@ -98,4 +101,17 @@ const arcTweenExit = (d) => {
     return arcPath(d); 
   }
 };
+
+// use function keyword to allow use of 'this'
+function arcTweenUpdate(d) {
+
+  // interpolate between the two objects
+  var i = d3.interpolate(this._current, d);
+  // update the current prop with new updated data
+  this._current = i(1);
+
+  return function(t) {
+    return arcPath(i(t))
+  }
+}
 
