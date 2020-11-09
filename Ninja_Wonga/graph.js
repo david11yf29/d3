@@ -22,6 +22,12 @@ const arcPath = d3.arc()
 // set color
 const color = d3.scaleOrdinal(d3['schemeSet3']);
 
+// legend setup
+
+
+
+
+
 // update function
 const update = (data) => {
 
