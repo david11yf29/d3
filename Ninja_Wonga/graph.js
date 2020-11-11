@@ -72,6 +72,10 @@ const update = (data) => {
       .transition().duration(750)
         // .attrTween('d', arcTweenEnter)
 
+  // add events
+  graph.selectAll('path')
+    .on('mouseover', handleMouseOver)
+
 }
 
 // reach firestore and pull out data and put into data array
@@ -129,5 +133,11 @@ function arcTweenUpdate(d) {
   return function(t) {
     return arcPath(i(t))
   }
+}
+
+// event handlers
+const handleMouseOver = (d, i) => {
+  console.log(d);
+  console.log(i);
 }
 
